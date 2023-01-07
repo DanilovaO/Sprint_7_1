@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.apache.http.HttpStatus.*;
+
 
 @RunWith(Parameterized.class)
 public class CreateOrderTest {
@@ -58,13 +60,13 @@ public class CreateOrderTest {
     @Test
     @DisplayName("Успешное создание заказа и наличие трек номера")
     public void checkCreateOrder() {
-        response.then().statusCode(201).and().body("track", notNullValue());
+        response.then().statusCode(SC_CREATED).and().body("track", notNullValue());
         Assert.assertTrue(orderTrackNumber.getTrack() > 0);
     }
     @Test
     @DisplayName("Проверяем, что на запрос возвращается список заказов")
     public void checkOrderBodyResponseHaveValue() {
-        given().log().all().get("/api/v1/orders").then().statusCode(200).and()
+        given().log().all().get("/api/v1/orders").then().statusCode(SC_OK).and()
                 .assertThat().body("orders", notNullValue());
     }
 }
